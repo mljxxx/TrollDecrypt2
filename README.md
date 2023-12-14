@@ -23,5 +23,5 @@ then use Payload folder wrap it,zip it,change .zip to .tipa
 - [dumpdecrypted](https://github.com/stefanesser/dumpdecrypted) by Stefan Esser
 - [bfdecrypt](https://github.com/BishopFox/bfdecrypt) by BishopFox
 - [opa334](https://github.com/opa334) for some pieces of code
-- [TrollDecrypt](https://github.com/donato-fiore/TrollDecrypt) by wh1te4ever
+- [TrollDecrypt](https://github.com/donato-fiore/TrollDecrypt) by donato-fiore
 - App Icon by super.user
