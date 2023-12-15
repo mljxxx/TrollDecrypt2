@@ -1,6 +1,10 @@
 # TrollDecrypt2
 iOS IPA Decrypter for TrollStore
 
+## Compare With TrollDecrypt
+Only support pid or identifier to decrypt.<br/>
+Use identifier option,it will try to find the process of identifier,and then suspend it,finally decrypt it.After that it will resume the process.(this use to decrypt app extension)
+
 ## How to use
 1. Download and install TrollDecrypt2 from [here](https://github.com/mljxxx/TrollDecrypt2/releases)
 2. enter pid or identifier,then click decrypt button

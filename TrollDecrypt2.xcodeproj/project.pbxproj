@@ -32,6 +32,7 @@
 		649BA3CA2B2AF324001C9EB5 /* aestab.c in Sources */ = {isa = PBXBuildFile; fileRef = 649BA3B52B2AF324001C9EB5 /* aestab.c */; };
 		649BA3CB2B2AF324001C9EB5 /* SSZipArchive.m in Sources */ = {isa = PBXBuildFile; fileRef = 649BA3BA2B2AF324001C9EB5 /* SSZipArchive.m */; };
 		649BA3CD2B2B1419001C9EB5 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 649BA3CC2B2B1419001C9EB5 /* MobileCoreServices.framework */; };
+		649BA4492B2C3472001C9EB5 /* silent.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 649BA4482B2C3472001C9EB5 /* silent.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -92,6 +93,7 @@
 		649BA3B92B2AF324001C9EB5 /* SSZipCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSZipCommon.h; sourceTree = "<group>"; };
 		649BA3BA2B2AF324001C9EB5 /* SSZipArchive.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSZipArchive.m; sourceTree = "<group>"; };
 		649BA3CC2B2B1419001C9EB5 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		649BA4482B2C3472001C9EB5 /* silent.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = silent.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -140,6 +142,7 @@
 				649BA2922B29FDBD001C9EB5 /* MobileCoreServices */,
 				649BA38B2B2ADF16001C9EB5 /* PSProcInfo.h */,
 				649BA38C2B2ADF16001C9EB5 /* PSProcInfo.m */,
+				649BA4482B2C3472001C9EB5 /* silent.mp3 */,
 			);
 			path = TrollDecrypt2;
 			sourceTree = "<group>";
@@ -284,6 +287,7 @@
 			files = (
 				649BA2682B29F4B8001C9EB5 /* LaunchScreen.storyboard in Resources */,
 				649BA2652B29F4B8001C9EB5 /* Assets.xcassets in Resources */,
+				649BA4492B2C3472001C9EB5 /* silent.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

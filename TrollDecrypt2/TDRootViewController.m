@@ -106,44 +106,58 @@ typedef void(^decryptCompleteCallBack)(void);
 
 - (void)waitForLaunch:(NSString *)identifier {
     while(true) {
-        PSProcInfo *procs = [PSProcInfo psProcInfoSort:NO];
-        if(procs->ret) {
-            continue;
-        }
-        for (int i = 0; i < procs->count; i++) {
-            pid_t pid = procs->kp[i].kp_proc.p_pid;
-            char buffer[MAXPATHLEN];
-            if (!proc_pidpath(pid, buffer, sizeof(buffer))) {
-                continue;;
-            }
-            NSString *executable = [NSString stringWithUTF8String:buffer];
-            if(!executable.length) {
+        @autoreleasepool {
+            PSProcInfo *procs = [PSProcInfo psProcInfoSort:NO];
+            if(procs->ret) {
                 continue;
             }
-            NSString *path = [executable stringByDeletingLastPathComponent];
-            NSDictionary *info = [NSDictionary dictionaryWithContentsOfFile:[path stringByAppendingPathComponent:@"Info.plist"]];
-            NSString *curIdentifier = info[@"CFBundleIdentifier"];
-            if(!curIdentifier.length || ![curIdentifier isEqualToString:identifier]) {
-                continue;
-            }
-            mach_port_t task;
-            if(!task_for_pid(mach_task_self(), pid, &task)) {
-                NSLog(@"Find pid for:%@",identifier);
-                [self suspendTask:task decrypt:pid];
-                return;
+            for (int i = 0; i < procs->count; i++) {
+                pid_t pid = procs->kp[i].kp_proc.p_pid;
+                char buffer[MAXPATHLEN];
+                if (!proc_pidpath(pid, buffer, sizeof(buffer))) {
+                    continue;
+                }
+                NSString *executable = [NSString stringWithUTF8String:buffer];
+                if(!executable.length) {
+                    continue;
+                }
+                NSString *path = [executable stringByDeletingLastPathComponent];
+                NSDictionary *info = [NSDictionary dictionaryWithContentsOfFile:[path stringByAppendingPathComponent:@"Info.plist"]];
+                NSString *curIdentifier = info[@"CFBundleIdentifier"];
+                if(!curIdentifier.length || ![curIdentifier isEqualToString:identifier]) {
+                    continue;
+                }
+                mach_port_t task;
+                if(!task_for_pid(mach_task_self(), pid, &task)) {
+                    NSLog(@"Find pid for:%@",identifier);
+                    [self suspendTask:task decrypt:pid];
+                    return;
+                }
             }
         }
+        [NSThread sleepForTimeInterval:0.1f];
     }
 }
 
 - (void)suspendTask:(mach_port_t)task decrypt:(pid_t)pid {
     if(!task_suspend(task)) {
         NSLog(@"suspend %d success",pid);
-        [self decryptWithPid:pid callBack:^{
-            if(!task_resume(task)) {
-                NSLog(@"resume %d success",pid);
-            }
-        }];
+        UIApplicationState state = [UIApplication sharedApplication].applicationState;
+        if(state == UIApplicationStateActive) {
+            NSLog(@"UIApplicationStateActive");
+            [self decryptWithPid:pid callBack:^{
+                if(!task_resume(task)) {
+                    NSLog(@"resume %d success",pid);
+                }
+            }];
+        } else if(state == UIApplicationStateBackground) {
+            NSLog(@"UIApplicationStateBackground");
+            [self backgroundDecryptWithPid:pid callBack:^{
+                if(!task_resume(task)) {
+                    NSLog(@"resume %d success",pid);
+                }
+            }];
+        }
     }
 }
 
@@ -179,6 +193,9 @@ typedef void(^decryptCompleteCallBack)(void);
             }
             // Do the decryption
             [dd createIPAFile:pid];
+            if(callBack) {
+                callBack();
+            }
             dispatch_async(dispatch_get_main_queue(), ^{
                 [alertController dismissViewControllerAnimated:NO completion:^{
                     alertController = [UIAlertController
@@ -194,9 +211,6 @@ typedef void(^decryptCompleteCallBack)(void);
                         [alertWindow removeFromSuperview];
                         alertWindow.hidden = YES;
                         alertWindow = nil;
-                        if(callBack) {
-                            callBack();
-                        }
                     }];
                     UIAlertAction *goFilzaAction = [UIAlertAction
                                                actionWithTitle:NSLocalizedString(@"GoFilza", @"GoFilza action")
@@ -207,11 +221,8 @@ typedef void(^decryptCompleteCallBack)(void);
                         [alertWindow removeFromSuperview];
                         alertWindow.hidden = YES;
                         alertWindow = nil;
-                        if(callBack) {
-                            callBack();
-                        }
-                        NSString *filzaDocumentPath = [@"filza://view/" stringByAppendingPathComponent:[NSHomeDirectory() stringByAppendingPathComponent:@"/Documents"]];
-                        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:filzaDocumentPath] options:@{} completionHandler:nil];
+                        NSString *urlString = [NSString stringWithFormat:@"filza://view%@", [[dd IPAPath] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]];
+                        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString] options:@{} completionHandler:nil];
                     }];
                     [alertController addAction:okAction];
                     [alertController addAction:goFilzaAction];
@@ -222,5 +233,66 @@ typedef void(^decryptCompleteCallBack)(void);
     });
 }
 
+
+- (void)backgroundDecryptWithPid:(pid_t)pid callBack:(decryptCompleteCallBack)callBack {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        char pathbuf[PROC_PIDPATHINFO_MAXSIZE];
+        proc_pidpath(pid, pathbuf, sizeof(pathbuf));
+        const char *fullPathStr = pathbuf;
+        NSString *executable = [NSString stringWithUTF8String:fullPathStr];
+        NSString *path = [executable stringByDeletingLastPathComponent];
+        NSDictionary *info = [NSDictionary dictionaryWithContentsOfFile:[path stringByAppendingPathComponent:@"Info.plist"]];
+        NSString *name = info[@"CFBundleDisplayName"];
+        NSString *version = info[@"CFBundleShortVersionString"];
+        DumpDecrypted *dd = [[DumpDecrypted alloc] initWithPathToBinary:[NSString stringWithUTF8String:fullPathStr] appName:name appVersion:version];
+        if(!dd) {
+            NSLog(@"ERROR: failed to get DumpDecrypted instance");
+            return;
+        }
+        // Do the decryption
+        [dd createIPAFile:pid];
+        if(callBack) {
+            callBack();
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            __block UIWindow *alertWindow = [[UIWindow alloc] initWithFrame: [UIScreen mainScreen].bounds];
+            alertWindow.rootViewController = [UIViewController new];
+            alertWindow.windowLevel = UIWindowLevelAlert + 1;
+            [alertWindow makeKeyAndVisible];
+            UIViewController *root = [alertWindow rootViewController];
+            root.modalPresentationStyle = UIModalPresentationFullScreen;
+            
+            UIAlertController *alertController = [UIAlertController
+                                                  alertControllerWithTitle:@"Decryption Complete!"
+                                                  message:@"You can find it in Documents Path"
+                                                  preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *okAction = [UIAlertAction
+                                       actionWithTitle:NSLocalizedString(@"OK", @"OK action")
+                                       style:UIAlertActionStyleDefault
+                                       handler:^(UIAlertAction *action) {
+                [alertController dismissViewControllerAnimated:NO completion:nil];
+                NSLog(@"OK action");
+                [alertWindow removeFromSuperview];
+                alertWindow.hidden = YES;
+                alertWindow = nil;
+            }];
+            UIAlertAction *goFilzaAction = [UIAlertAction
+                                            actionWithTitle:NSLocalizedString(@"GoFilza", @"GoFilza action")
+                                            style:UIAlertActionStyleDefault
+                                            handler:^(UIAlertAction *action) {
+                [alertController dismissViewControllerAnimated:NO completion:nil];
+                NSLog(@"GoFilza action");
+                [alertWindow removeFromSuperview];
+                alertWindow.hidden = YES;
+                alertWindow = nil;
+                NSString *urlString = [NSString stringWithFormat:@"filza://view%@", [[dd IPAPath] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]];
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString] options:@{} completionHandler:nil];
+            }];
+            [alertController addAction:okAction];
+            [alertController addAction:goFilzaAction];
+            [root presentViewController:alertController animated:YES completion:nil];
+        });
+    });
+}
 
 @end
