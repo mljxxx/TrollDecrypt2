@@ -3,4 +3,5 @@ xcodebuild build -project TrollDecrypt2.xcodeproj -scheme TrollDecrypt2 -destina
 mkdir ./Payload
 cp -r ./DerivedData/Build/Products/Release-iphoneos/TrollDecrypt2.app ./Payload/TrollDecrypt2.app
 ldid -Sentitlements.plist Payload/TrollDecrypt2.app/TrollDecrypt2
+rm -rf ./Payload/TrollDecrypt2.app/embedded.mobileprovision
 zip -r -q -o TrollDecrypt2.tipa ./Payload
