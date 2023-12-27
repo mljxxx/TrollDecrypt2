@@ -16,10 +16,8 @@ Use identifier option,it will try to find the process of identifier,and then sus
 git clone https://github.com/mljxxx/TrollDecrypt2.git
 cd TrollDecrypt2
 open TrollDecrypt2.xcodeproj
-build
-#find the app file in DerivedData path,and use ldid to add entitlements.
-ldid -Sentitlements.plist TrollDecrypt2.app/TrollDecrypt2
-then use Payload folder wrap it,zip it,change .zip to .tipa
+configure Signing in Signing & Capabilities
+./build.sh
 ```
 
 ## Credits / Thanks

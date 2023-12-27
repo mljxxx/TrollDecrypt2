@@ -184,7 +184,7 @@ typedef void(^decryptCompleteCallBack)(void);
             NSString *executable = [NSString stringWithUTF8String:fullPathStr];
             NSString *path = [executable stringByDeletingLastPathComponent];
             NSDictionary *info = [NSDictionary dictionaryWithContentsOfFile:[path stringByAppendingPathComponent:@"Info.plist"]];
-            NSString *name = info[@"CFBundleDisplayName"];
+            NSString *name = info[@"CFBundleIdentifier"];
             NSString *version = info[@"CFBundleShortVersionString"];
             DumpDecrypted *dd = [[DumpDecrypted alloc] initWithPathToBinary:[NSString stringWithUTF8String:fullPathStr] appName:name appVersion:version];
             if(!dd) {
