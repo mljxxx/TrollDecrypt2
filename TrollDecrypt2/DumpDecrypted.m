@@ -275,7 +275,7 @@ int find_off_cryptid(const char *filePath) {
 	char *lastPartOfAppPath = strdup(appPath); // Must free()
 	lastPartOfAppPath = strrchr(lastPartOfAppPath, '/');
 	lastPartOfAppPath++;
-	NSString *path = [NSString stringWithFormat:@"%s/ipa/Payload/%s", docPath, lastPartOfAppPath];
+	NSString *path = [NSString stringWithFormat:@"%s/%@/Payload/%s", docPath,self.appName, lastPartOfAppPath];
 	self->appDirPath = strdup([path UTF8String]);
 	if(p)
 		path = [NSString stringWithFormat:@"%@/%s", path, encryptedImagePathStr];
@@ -293,7 +293,7 @@ int find_off_cryptid(const char *filePath) {
 }
 
  
--(BOOL) dumpDecryptedImage:(vm_address_t)imageAddress fileName:(const char *)encryptedImageFilenameStr image:(int)imageNum task:(vm_map_t)targetTask{
+-(BOOL)dumpDecryptedImage:(vm_address_t)imageAddress fileName:(const char *)encryptedImageFilenameStr image:(int)imageNum task:(vm_map_t)targetTask{
 	// struct load_command *lc;
 	struct encryption_info_command *eic;
 	struct fat_header *fh;
@@ -558,8 +558,8 @@ int find_off_cryptid(const char *filePath) {
 -(void) createIPAFile:(pid_t)pid {
 	NSString *IPAFile = [self IPAPath];
 	NSString *appDir  = [self appPath];
-	NSString *appCopyDir = [NSString stringWithFormat:@"%@/ipa/Payload/%s", [self docPath], self->appDirName];
-	NSString *zipDir = [NSString stringWithFormat:@"%@/ipa", [self docPath]];
+	NSString *appCopyDir = [NSString stringWithFormat:@"%@/%@/Payload/%s", [self docPath],self.appName, self->appDirName];
+	NSString *zipDir = [NSString stringWithFormat:@"%@/%@", [self docPath],self.appName];
 	NSFileManager *fm = [[NSFileManager alloc] init];
 	NSError *err;
     
