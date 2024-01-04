@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		649BA2652B29F4B8001C9EB5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 649BA2642B29F4B8001C9EB5 /* Assets.xcassets */; };
+		6428D76D2B46817F004DD233 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6428D76C2B46817F004DD233 /* Assets.xcassets */; };
 		649BA2682B29F4B8001C9EB5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 649BA2662B29F4B8001C9EB5 /* LaunchScreen.storyboard */; };
 		649BA2842B29F626001C9EB5 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 649BA27D2B29F626001C9EB5 /* main.m */; };
 		649BA2852B29F626001C9EB5 /* TDAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 649BA27E2B29F626001C9EB5 /* TDAppDelegate.m */; };
@@ -36,8 +36,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6428D76C2B46817F004DD233 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		649BA2552B29F4B7001C9EB5 /* TrollDecrypt2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TrollDecrypt2.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		649BA2642B29F4B8001C9EB5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		649BA2672B29F4B8001C9EB5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		649BA2692B29F4B8001C9EB5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		649BA27D2B29F626001C9EB5 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -128,7 +128,7 @@
 		649BA2572B29F4B7001C9EB5 /* TrollDecrypt2 */ = {
 			isa = PBXGroup;
 			children = (
-				649BA2642B29F4B8001C9EB5 /* Assets.xcassets */,
+				6428D76C2B46817F004DD233 /* Assets.xcassets */,
 				649BA2662B29F4B8001C9EB5 /* LaunchScreen.storyboard */,
 				649BA2692B29F4B8001C9EB5 /* Info.plist */,
 				649BA27D2B29F626001C9EB5 /* main.m */,
@@ -286,7 +286,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				649BA2682B29F4B8001C9EB5 /* LaunchScreen.storyboard in Resources */,
-				649BA2652B29F4B8001C9EB5 /* Assets.xcassets in Resources */,
+				6428D76D2B46817F004DD233 /* Assets.xcassets in Resources */,
 				649BA4492B2C3472001C9EB5 /* silent.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -452,9 +452,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 2X2FV6CCS5;
+				DEVELOPMENT_TEAM = "";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -474,6 +477,7 @@
 				MARKETING_VERSION = 1.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.app.troll.TrollDecrypt2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -484,9 +488,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 2X2FV6CCS5;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TrollDecrypt2/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -501,6 +508,7 @@
 				MARKETING_VERSION = 1.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.app.troll.TrollDecrypt2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
